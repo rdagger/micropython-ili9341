@@ -3,6 +3,7 @@
 
 class TouchKeyboard(object):
     """Touchscreen keyboard for ILI9341."""
+
     YELLOW = const(65504)
     GREEN = const(2016)
 
@@ -96,13 +97,13 @@ class TouchKeyboard(object):
                 self.kb_screen ^= 1  # Toggle caps
                 self.load_keyboard()
             elif key == '\f':
-                self.kb_screen = 3  # Extended symbols
+                self.kb_screen = 3  # Symbols Set 2
                 self.load_keyboard()
             elif key == '\v':
-                self.kb_screen = 2  # Numbers & symbols
+                self.kb_screen = 2  # Symbols Set 1
                 self.load_keyboard()
             elif key == '\a':
-                self.kb_screen = 0  # Leters
+                self.kb_screen = 0  # Letters
                 self.load_keyboard()
             elif key == '\n':
                 self.kb_screen = 2  # Numbers & symbols
