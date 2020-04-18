@@ -85,7 +85,6 @@ class Touch(object):
             sleep(.05)
             timeout -= .05
         return None
-#
 
     def int_press(self, pin):
         """Send X,Y values to passed interrupt handler."""
