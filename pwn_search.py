@@ -100,7 +100,7 @@ def main():
     spi2 = SPI(2, baudrate=1000000,
                sck=Pin(18), mosi=Pin(23), miso=Pin(19))
 
-    pwn = PwnLookup(spi1, spi2)
+    PwnLookup(spi1, spi2)
 
     while True:
         sleep(.1)

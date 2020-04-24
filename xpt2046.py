@@ -99,7 +99,6 @@ class Touch(object):
         elif pin.value() and self.int_locked:
             sleep(.1)  # Debounce rising edge
             self.int_locked = False  # Unlock interrupt
-            return
 
     def normalize(self, x, y):
         """Normalize mean X,Y values to match LCD screen."""

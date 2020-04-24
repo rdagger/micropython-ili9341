@@ -29,7 +29,7 @@ class TouchKeyboard(object):
         (
             ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0'),
             ('<', '>', '|', '\\', '/', '{', '}', '[', ']'),
-            ('\v', '=', '"', '\'', ';', ':', '`', '~', '\b', '\b'),
+            ('\f', '=', '"', '\'', ';', ':', '`', '~', '\b', '\b'),
             ('\a', ' ', '\r')
         )
     )
@@ -97,10 +97,7 @@ class TouchKeyboard(object):
                 self.kb_screen ^= 1  # Toggle caps
                 self.load_keyboard()
             elif key == '\f':
-                self.kb_screen = 3  # Symbols Set 2
-                self.load_keyboard()
-            elif key == '\v':
-                self.kb_screen = 2  # Symbols Set 1
+                self.kb_screen = self.kb_screen - 2 ^ 1 + 2  # Toggle symbols
                 self.load_keyboard()
             elif key == '\a':
                 self.kb_screen = 0  # Letters
