@@ -93,24 +93,21 @@ class TouchKeyboard(object):
 
             key = self.KEYS[self.kb_screen][row][column]
 
-            if key == '\t':
-                self.kb_screen ^= 1  # Toggle caps
-                self.load_keyboard()
-            elif key == '\f':
-                self.kb_screen = self.kb_screen - 2 ^ 1 + 2  # Toggle symbols
+            if key == '\t' or key == '\f':
+                self.kb_screen ^= 1  # Toggle caps or flip symbol sets
                 self.load_keyboard()
             elif key == '\a':
-                self.kb_screen = 0  # Letters
+                self.kb_screen = 0  # Switch to alphabet screen
                 self.load_keyboard()
             elif key == '\n':
-                self.kb_screen = 2  # Numbers & symbols
+                self.kb_screen = 2  # Switch to numeric / symbols screen
                 self.load_keyboard()
             elif key == '\b':  # Backspace
                 self.kb_text = self.kb_text[:-1]
                 margin = self.font.measure_text(self.kb_text)
                 self.display.fill_vrect(margin, 11, 12, 24, 0)
             elif key == '\r':
-                # Keyboard return pressed
+                # Keyboard return pressed (start search)
                 if self.kb_text != '':
                     return True
             else:
