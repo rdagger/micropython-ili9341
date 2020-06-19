@@ -91,7 +91,7 @@ def test():
     """Bouncing sprite."""
     try:
         # Baud rate of 40000000 seems about the max
-        spi = SPI(2, baudrate=40000000, sck=Pin(18), mosi=Pin(23))
+        spi = SPI(1, baudrate=40000000, sck=Pin(14), mosi=Pin(13))
         display = Display(spi, dc=Pin(4), cs=Pin(16), rst=Pin(17))
         display.clear()
 
