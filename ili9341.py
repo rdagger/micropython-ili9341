@@ -3,6 +3,7 @@ from time import sleep
 from math import cos, sin, pi, radians
 from sys import implementation
 import ustruct
+from uio import BytesIO
 
 
 def color565(r, g, b):
@@ -315,12 +316,13 @@ class Display(object):
             return
         line = color.to_bytes(2, 'big') * w
         self.block(x, y, x + w - 1, y, line)
-
-    def draw_image(self, path, x=0, y=0, w=320, h=240):
+        
+    def draw_image(self, path=None, bytes=None, x=0, y=0, w=320, h=240):
         """Draw image from flash.
 
         Args:
             path (string): Image file path.
+            bytes (bytes): Image bytes.
             x (int): X coordinate of image left.  Default is 0.
             y (int): Y coordinate of image top.  Default is 0.
             w (int): Width of image.  Default is 320.
@@ -330,7 +332,11 @@ class Display(object):
         y2 = y + h - 1
         if self.is_off_grid(x, y, x2, y2):
             return
-        with open(path, "rb") as f:
+        
+        if (path is None and bytes is None) or (path is not None and bytes is not None):
+            return
+        
+        with open(path, "rb") if path else BytesIO(bytes) as f:
             chunk_height = 1024 // w
             chunk_count, remainder = divmod(h, chunk_height)
             chunk_size = chunk_height * w * 2
