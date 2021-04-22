@@ -50,6 +50,7 @@ class Display(object):
     MADCTL = const(0x36)  # Memory access control
     VSCRSADD = const(0x37)  # Vertical scrolling start address
     PIXFMT = const(0x3A)  # COLMOD: Pixel format set
+    CONTRAST_MASTER = const(0x51)  # Write Display Brightness
     FRMCTR1 = const(0xB1)  # Frame rate control (In normal mode/full colors)
     FRMCTR2 = const(0xB2)  # Frame rate control (In idle mode/8 colors)
     FRMCTR3 = const(0xB3)  # Frame rate control (In partial mode/full colors)
@@ -193,11 +194,9 @@ class Display(object):
         """Set display contrast to specified level.
 
         Args:
-            level (int): Contrast level (0 - 15).
-        Note:
-            Can pass list to specifiy
+            level (int): Contrast level (0 - 255).
         """
-        assert(0 <= level < 16)
+        assert(0 <= level <= 255)
         self.write_cmd(self.CONTRAST_MASTER, level)
 
     def display_off(self):
@@ -572,7 +571,7 @@ class Display(object):
             color (int): RGB565 color value.
         """
         # Confirm coordinates in boundary
-        if self.is_off_grid(x, y, x, y + h):
+        if self.is_off_grid(x, y, x, y + h - 1):
             return
         line = color.to_bytes(2, 'big') * h
         self.block(x, y, x, y + h - 1, line)
