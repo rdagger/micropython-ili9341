@@ -50,7 +50,14 @@ class Display(object):
     MADCTL = const(0x36)  # Memory access control
     VSCRSADD = const(0x37)  # Vertical scrolling start address
     PIXFMT = const(0x3A)  # COLMOD: Pixel format set
-    CONTRAST_MASTER = const(0x51)  # Write Display Brightness
+    WRITE_DISPLAY_BRIGHTNESS = const(0x51)  # Brightness hardware dependent!
+    READ_DISPLAY_BRIGHTNESS = const(0x52)
+    WRITE_CTRL_DISPLAY = const(0x53)
+    READ_CTRL_DISPLAY = const(0x54)
+    WRITE_CABC = const(0x55)  # Write Content Adaptive Brightness Control
+    READ_CABC = const(0x56)  # Read Content Adaptive Brightness Control
+    WRITE_CABC_MINIMUM = const(0x5E)  # Write CABC Minimum Brightness
+    READ_CABC_MINIMUM = const(0x5F)  # Read CABC Minimum Brightness
     FRMCTR1 = const(0xB1)  # Frame rate control (In normal mode/full colors)
     FRMCTR2 = const(0xB2)  # Frame rate control (In idle mode/8 colors)
     FRMCTR3 = const(0xB3)  # Frame rate control (In partial mode/full colors)
@@ -189,15 +196,6 @@ class Display(object):
             line = bytearray(w * 16)
         for y in range(0, h, 8):
             self.block(0, y, w - 1, y + 7, line)
-
-    def contrast(self, level):
-        """Set display contrast to specified level.
-
-        Args:
-            level (int): Contrast level (0 - 255).
-        """
-        assert(0 <= level <= 255)
-        self.write_cmd(self.CONTRAST_MASTER, level)
 
     def display_off(self):
         """Turn display off."""
