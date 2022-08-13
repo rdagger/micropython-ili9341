@@ -957,6 +957,18 @@ class Display(object):
                            bottom >> 8,
                            bottom & 0xFF)
 
+    def sleep(self, enable=True):
+        """Enters or exits sleep mode.
+
+        Args:
+            enable (bool): True (default)=Enter sleep mode, False=Exit sleep
+        """
+        if enable:
+            self.write_cmd(self.SLPIN)
+        else:
+            self.write_cmd(self.SLPOUT)
+
+
     def write_cmd_mpy(self, command, *args):
         """Write command to OLED (MicroPython).
 
