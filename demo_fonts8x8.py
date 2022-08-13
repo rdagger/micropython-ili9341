@@ -1,4 +1,4 @@
-"""ILI9341 demo demo (fonts 8x8)."""
+"""ILI9341 demo (fonts 8x8)."""
 from time import sleep
 from ili9341 import Display, color565
 from machine import Pin, SPI  # type: ignore
