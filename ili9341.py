@@ -2,7 +2,8 @@
 from time import sleep
 from math import cos, sin, pi, radians
 from sys import implementation
-import ustruct
+from framebuf import FrameBuffer, RGB565  # type: ignore
+import ustruct  # type: ignore
 
 
 def color565(r, g, b):
@@ -558,6 +559,62 @@ class Display(object):
                 #     self.fill_vrect(x + w, y, spacing, h, background)
                 # # Position x for next letter
                 # x += w + spacing
+
+    def draw_text8x8(self, x, y, text, color,  background=0,
+                     rotate=0):
+        """Draw text using built-in MicroPython 8x8 bit font.
+
+        Args:
+            x (int): Starting X position.
+            y (int): Starting Y position.
+            text (string): Text to draw.
+            color (int): RGB565 color value.
+            background (int): RGB565 background color (default: black).
+            rotate(int): 0, 90, 180, 270
+        """
+        w = len(text) * 8
+        h = 8
+        # Confirm coordinates in boundary
+        if self.is_off_grid(x, y, x + 7, y + 7):
+            return
+        # Rearrange color
+        r = (color & 0xF800) >> 8
+        g = (color & 0x07E0) >> 3
+        b = (color & 0x1F) << 3
+        buf = bytearray(w * 16)
+        fbuf = FrameBuffer(buf, w, h, RGB565)
+        if background != 0:
+            bg_r = (background & 0xF800) >> 8
+            bg_g = (background & 0x07E0) >> 3
+            bg_b = (background & 0x1F) << 3
+            fbuf.fill(color565(bg_b, bg_r, bg_g))
+        fbuf.text(text, 0, 0, color565(b, r, g))
+        if rotate == 0:
+            self.block(x, y, x + w - 1, y + (h - 1), buf)
+        elif rotate == 90:
+            buf2 = bytearray(w * 16)
+            fbuf2 = FrameBuffer(buf2, h, w, RGB565)
+            for y1 in range(h):
+                for x1 in range(w):
+                    fbuf2.pixel(y1, x1,
+                                fbuf.pixel(x1, (h - 1) - y1))
+            self.block(x, y, x + (h - 1), y + w - 1, buf2)
+        elif rotate == 180:
+            buf2 = bytearray(w * 16)
+            fbuf2 = FrameBuffer(buf2, w, h, RGB565)
+            for y1 in range(h):
+                for x1 in range(w):
+                    fbuf2.pixel(x1, y1,
+                                fbuf.pixel((w - 1) - x1, (h - 1) - y1))
+            self.block(x, y, x + w - 1, y + (h - 1), buf2)
+        elif rotate == 270:
+            buf2 = bytearray(w * 16)
+            fbuf2 = FrameBuffer(buf2, h, w, RGB565)
+            for y1 in range(h):
+                for x1 in range(w):
+                    fbuf2.pixel(y1, x1,
+                                fbuf.pixel((w - 1) - x1, y1))
+            self.block(x, y, x + (h - 1), y + w - 1, buf2)
 
     def draw_vline(self, x, y, h, color):
         """Draw a vertical line.

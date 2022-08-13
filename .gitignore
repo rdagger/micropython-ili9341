@@ -1,3 +1,5 @@
 .flake8
 .ftpconfig
 .vscode/
+main.py
+ftp.py
