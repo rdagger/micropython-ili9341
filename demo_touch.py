@@ -15,7 +15,7 @@ class Demo(object):
 
         Args:
             display (ILI9341): display object
-            touch (XPT2046): touchscreen object
+            spi2 (SPI): SPI bus
         """
         self.display = display
         self.touch = Touch(spi2, cs=Pin(5), int_pin=Pin(0),
