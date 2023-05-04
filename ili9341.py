@@ -182,21 +182,31 @@ class Display(object):
         self.spi.deinit()
         print('display off')
 
-    def clear(self, color=0):
+    def clear(self, color=0, hlines=8):
         """Clear display.
 
         Args:
             color (Optional int): RGB565 color value (Default: 0 = Black).
+            hlines (Optional int): # of horizontal lines per chunk (Default: 8)
+        Note:
+            hlines was introduced to deal with memory allocation on some
+            boards.  Smaller values allocate less memory but take longer
+            to execute.  hlines must be a factor of the display height.
+            For example, for a 240 pixel height, valid values for hline
+            would be 1, 2, 4, 5, 8, 10, 16, 20, 32, 40, 64, 80, 160.
+            Higher values may result in memory allocation errors.
         """
         w = self.width
         h = self.height
-        # Clear display in 1024 byte blocks
+        assert hlines > 0 and h % hlines == 0, (
+            "hlines must be a non-zero factor of height.")
+        # Clear display
         if color:
-            line = color.to_bytes(2, 'big') * (w * 8)
+            line = color.to_bytes(2, 'big') * (w * hlines)
         else:
-            line = bytearray(w * 16)
-        for y in range(0, h, 8):
-            self.block(0, y, w - 1, y + 7, line)
+            line = bytearray(w * 2 * hlines)
+        for y in range(0, h, hlines):
+            self.block(0, y, w - 1, y + hlines - 1, line)
 
     def display_off(self):
         """Turn display off."""
