@@ -44,7 +44,7 @@ def test():
 
     for hlines, (color, rgb) in zip(valid_hlines, colors.items()):
         gc.collect()
-        print(f'Clearing display to {color}, hlines={hlines}')
+        print(f'Clearing display to {color}, hlines={hlines}...')
         try:
             start = ticks_ms()
             display.clear(hlines=hlines, color=color565(*rgb))
