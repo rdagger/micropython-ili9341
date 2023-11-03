@@ -34,7 +34,7 @@ class XglcdFont(object):
             letter_count (int): Total number of letters.  Default is 96.
         """
         self.width = width
-        self.height = height
+        self.height = max(height, 8)
         self.start_letter = start_letter
         self.letter_count = letter_count
         self.bytes_per_letter = (floor(

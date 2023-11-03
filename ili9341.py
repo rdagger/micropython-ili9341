@@ -357,7 +357,7 @@ class Display(object):
                            buf)
 
     def draw_letter(self, x, y, letter, font, color, background=0,
-                    landscape=False):
+                    landscape=False, rotate_180=False):
         """Draw a letter.
 
         Args:
@@ -366,10 +366,25 @@ class Display(object):
             letter (string): Letter to draw.
             font (XglcdFont object): Font.
             color (int): RGB565 color value.
-            background (int): RGB565 background color (default: black).
+            background (int): RGB565 background color (default: black)
             landscape (bool): Orientation (default: False = portrait)
+            rotate_180 (bool): Rotate text by 180 degrees
         """
         buf, w, h = font.get_letter(letter, color, background, landscape)
+        if rotate_180:
+            # Manually rotate the buffer by 180 degrees
+            # ensure bytes pairs for each pixel retain color565
+            new_buf = bytearray(len(buf))
+            num_pixels = len(buf) // 2
+            for i in range(num_pixels):
+                # The index for the new buffer's byte pair
+                new_idx = (num_pixels - 1 - i) * 2
+                # The index for the original buffer's byte pair
+                old_idx = i * 2
+                # Swap the pixels
+                new_buf[new_idx], new_buf[new_idx + 1] = buf[old_idx], buf[old_idx + 1]
+            buf = new_buf
+
         # Check for errors (Font could be missing specified letter)
         if w == 0:
             return w, h
@@ -529,23 +544,25 @@ class Display(object):
         self.block(x, y, x2, y2, buf)
 
     def draw_text(self, x, y, text, font, color,  background=0,
-                  landscape=False, spacing=1):
+                  landscape=False, rotate_180=False, spacing=1):
         """Draw text.
 
         Args:
-            x (int): Starting X position.
-            y (int): Starting Y position.
-            text (string): Text to draw.
-            font (XglcdFont object): Font.
-            color (int): RGB565 color value.
-            background (int): RGB565 background color (default: black).
+            x (int): Starting X position
+            y (int): Starting Y position
+            text (string): Text to draw
+            font (XglcdFont object): Font
+            color (int): RGB565 color value
+            background (int): RGB565 background color (default: black)
             landscape (bool): Orientation (default: False = portrait)
+            rotate_180 (bool): Rotate text by 180 degrees
             spacing (int): Pixels between letters (default: 1)
         """
-        for letter in text:
+        iterable_text = reversed(text) if rotate_180 else text
+        for letter in iterable_text:
             # Get letter array and letter dimensions
             w, h = self.draw_letter(x, y, letter, font, color, background,
-                                    landscape)
+                                    landscape, rotate_180)
             # Stop on error
             if w == 0 or h == 0:
                 print('Invalid width {0} or height {1}'.format(w, h))
