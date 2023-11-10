@@ -3,7 +3,6 @@ from time import sleep
 from math import cos, sin, pi, radians
 from sys import implementation
 from framebuf import FrameBuffer, RGB565  # type: ignore
-import ustruct  # type: ignore
 
 
 def color565(r, g, b):
@@ -169,9 +168,10 @@ class Display(object):
             y1 (int):  Ending Y position.
             data (bytes): Data buffer to write.
         """
-        self.write_cmd(self.SET_COLUMN, *ustruct.pack(">HH", x0, x1))
-        self.write_cmd(self.SET_PAGE, *ustruct.pack(">HH", y0, y1))
-
+        self.write_cmd(self.SET_COLUMN,
+                       x0 >> 8, x0 & 0xff, x1 >> 8, x1 & 0xff)
+        self.write_cmd(self.SET_PAGE,
+                       y0 >> 8, y0 & 0xff, y1 >> 8, y1 & 0xff)
         self.write_cmd(self.WRITE_RAM)
         self.write_data(data)
 
@@ -994,7 +994,6 @@ class Display(object):
             self.write_cmd(self.SLPIN)
         else:
             self.write_cmd(self.SLPOUT)
-
 
     def write_cmd_mpy(self, command, *args):
         """Write command to OLED (MicroPython).
