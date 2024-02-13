@@ -7,5 +7,6 @@ Full write up on my website [Rototron](https://www.rototron.info/projects/esp32-
 
 _Tested on ESP32 (Wemos Lolin32 & Loline32 Pro)_
 
-Use the img2rgb565.py tool located in the utils folder to change image files like JPEG and PNG into the required raw RGB565 format.
-The fonts available in this repository were made with a free conversion tool named [GLCD Font Creator](https://www.mikroe.com/glcd-font-creator/).
+#### Notes
+1. Use the img2rgb565.py tool located in the utils folder to change image files like JPEG and PNG into the required raw RGB565 format.
+2. The fonts available in this repository were made with a free conversion tool named [GLCD Font Creator](https://www.mikroe.com/glcd-font-creator/).
