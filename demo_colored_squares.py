@@ -28,7 +28,7 @@ LIGHT_YELLOW = const(0XFFF0)  # (255, 255, 128)
 LIGHT_CORAL = const(0XFC10)  # (255, 128, 128)
 LIGHT_GREEN = const(0X87F0)  # (128, 255, 128)
 LIGHT_SLATE_BLUE = const(0X841F)  # (128, 128, 255)
-WHITE = const(0XFFF)  # (255, 255, 255)
+WHITE = const(0XFFFF)  # (255, 255, 255)
 
 
 def test():
@@ -41,10 +41,9 @@ def test():
     colors = [getattr(modules[__name__], name) for name in dir(
         modules[__name__]) if name.isupper() and name is not 'SPI']
 
-    colors.sort()
     c = 0
-    for x in range(0, 240, 48):
-        for y in range(0, 320, 64):
+    for y in range(0, 320, 64):
+        for x in range(0, 240, 48):
             display.fill_rectangle(x, y, 47, 63, colors[c])
             c += 1
     sleep(9)
