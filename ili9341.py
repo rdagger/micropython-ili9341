@@ -193,7 +193,7 @@ class Display(object):
             boards.  Smaller values allocate less memory but take longer
             to execute.  hlines must be a factor of the display height.
             For example, for a 240 pixel height, valid values for hline
-            would be 1, 2, 4, 5, 8, 10, 16, 20, 32, 40, 64, 80, 160.
+            would be 1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 16, 20, 24, 30, 40, etc.
             Higher values may result in memory allocation errors.
         """
         w = self.width
