@@ -18,13 +18,12 @@ def test():
     try:
         # Baud rate of 40000000 seems about the max
         spi = SPI(1, baudrate=40000000, sck=Pin(14), mosi=Pin(13))
-
         display = Display(spi, dc=Pin(4), cs=Pin(16), rst=Pin(17))
         display.clear()
 
         # Load sprite
         cat = display.load_sprite('images/Cat221x1232.raw',
-                                  SPRITE_WIDTH, SPRITE_HEIGHT * 8)
+                                  SPRITE_WIDTH, SPRITE_HEIGHT * SPRITE_COUNT)
         # Use memoryview to improve memory usage
         mv_cat = memoryview(cat)
 
