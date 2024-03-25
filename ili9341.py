@@ -932,7 +932,7 @@ class Display(object):
             w (int): Width of image.
             h (int): Height of image.
         Notes:
-            w x h cannot exceed 2048
+            w x h cannot exceed 2048 on boards w/o PSRAM
         """
         buf_size = w * h * 2
         with open(path, "rb") as f:
