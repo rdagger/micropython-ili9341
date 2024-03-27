@@ -36,8 +36,7 @@ def test():
             offset = SIZE * index
             display.draw_sprite(mv_cat[offset: offset + SIZE], x, y,
                                 SPRITE_WIDTH, SPRITE_HEIGHT)
-            index += 1  # Increment sprite index
-            index &= 7  # Wrap sprite index on end sprite
+            index = (index + 1) & 7  # Next sprite index (wrap on last)
 
             # Attempt to set framerate to 30 FPS
             timer_dif = 33333 - ticks_diff(ticks_us(), timer)
