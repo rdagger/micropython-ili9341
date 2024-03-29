@@ -3,6 +3,7 @@ from time import sleep
 from math import cos, sin, pi, radians
 from sys import implementation
 from framebuf import FrameBuffer, RGB565  # type: ignore
+from micropython import const  # type: ignore
 
 
 def color565(r, g, b):
@@ -88,8 +89,8 @@ class Display(object):
         270: 0x28
     }
 
-    def __init__(self, spi, cs, dc, rst,
-                 width=240, height=320, rotation=0):
+    def __init__(self, spi, cs, dc, rst, width=240, height=320, rotation=0,
+                 bgr=True, gamma=True):
         """Initialize OLED.
 
         Args:
@@ -100,6 +101,8 @@ class Display(object):
             width (Optional int): Screen width (default 240)
             height (Optional int): Screen height (default 320)
             rotation (Optional int): Rotation must be 0 default, 90. 180 or 270
+            bgr (Optional bool): Swaps red and blue colors (default True)
+            gamma (Optional bool): Custom gamma correction (default True)
         """
         self.spi = spi
         self.cs = cs
@@ -111,6 +114,8 @@ class Display(object):
             raise RuntimeError('Rotation must be 0, 90, 180 or 270.')
         else:
             self.rotation = self.ROTATE[rotation]
+            if not bgr:  # Clear BGR bit
+                self.rotation &= 0b11110111
 
         # Initialize GPIO pins and set implementation specific methods
         if implementation.name == 'circuitpython':
@@ -148,10 +153,13 @@ class Display(object):
         self.write_cmd(self.DFUNCTR, 0x08, 0x82, 0x27)
         self.write_cmd(self.ENABLE3G, 0x00)  # Enable 3 gamma ctrl
         self.write_cmd(self.GAMMASET, 0x01)  # Gamma curve selected
-        self.write_cmd(self.GMCTRP1, 0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08, 0x4E,
-                       0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09, 0x00)
-        self.write_cmd(self.GMCTRN1, 0x00, 0x0E, 0x14, 0x03, 0x11, 0x07, 0x31,
-                       0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F)
+        if gamma:  # Use custom gamma correction values
+            self.write_cmd(self.GMCTRP1, 0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08,
+                           0x4E, 0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09,
+                           0x00)
+            self.write_cmd(self.GMCTRN1, 0x00, 0x0E, 0x14, 0x03, 0x11, 0x07,
+                           0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36,
+                           0x0F)
         self.write_cmd(self.SLPOUT)  # Exit sleep
         sleep(.1)
         self.write_cmd(self.DISPLAY_ON)  # Display on
@@ -896,6 +904,17 @@ class Display(object):
             self.block(chunk_x, y,
                        chunk_x + remainder - 1, y + h - 1,
                        buf)
+
+    def invert(self, enable=True):
+        """Enables or disables inversion of display colors.
+
+        Args:
+            enable (Optional bool): True=enable, False=disable
+        """
+        if enable:
+            self.write_cmd(self.INVON)
+        else:
+            self.write_cmd(self.INVOFF)
 
     def is_off_grid(self, xmin, ymin, xmax, ymax):
         """Check if coordinates extend past display boundaries.
