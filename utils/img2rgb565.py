@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Utility to convert images to raw RGB565 format."""
+"""Utility to convert images to raw RGB565 format.
+
+Usage:
+    python img2rgb565.py <your_image>
+    <your_image> is the full path to the image file you want to convert.
+"""
 
 from PIL import Image
 from struct import pack
