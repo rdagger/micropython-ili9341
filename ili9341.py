@@ -82,15 +82,19 @@ class Display(object):
     ENABLE3G = const(0xF2)  # Enable 3 gamma control
     PUMPRC = const(0xF7)  # Pump ratio control
 
-    ROTATE = {
-        0: 0x88,
-        90: 0xE8,
-        180: 0x48,
-        270: 0x28
+    MIRROR_ROTATE = {  # MADCTL configurations for rotation and mirroring
+        (False, 0): 0x80,  # 1000 0000
+        (False, 90): 0xE0,  # 1110 0000
+        (False, 180): 0x40,  # 0100 0000
+        (False, 270): 0x20,  # 0010 0000
+        (True, 0): 0xC0,   # 1100 0000
+        (True, 90): 0x60,  # 0110 0000
+        (True, 180): 0x00,  # 0000 0000
+        (True, 270): 0xA0  # 1010 0000
     }
 
     def __init__(self, spi, cs, dc, rst, width=240, height=320, rotation=0,
-                 bgr=True, gamma=True):
+                 mirror=False, bgr=True, gamma=True):
         """Initialize OLED.
 
         Args:
@@ -101,6 +105,7 @@ class Display(object):
             width (Optional int): Screen width (default 240)
             height (Optional int): Screen height (default 320)
             rotation (Optional int): Rotation must be 0 default, 90. 180 or 270
+            mirror (Optional bool): Mirror display (default False)
             bgr (Optional bool): Swaps red and blue colors (default True)
             gamma (Optional bool): Custom gamma correction (default True)
         """
@@ -110,12 +115,12 @@ class Display(object):
         self.rst = rst
         self.width = width
         self.height = height
-        if rotation not in self.ROTATE.keys():
-            raise RuntimeError('Rotation must be 0, 90, 180 or 270.')
+        if (mirror, rotation) not in self.MIRROR_ROTATE:
+            raise ValueError('Rotation must be 0, 90, 180 or 270.')
         else:
-            self.rotation = self.ROTATE[rotation]
-            if not bgr:  # Clear BGR bit
-                self.rotation &= 0b11110111
+            self.rotation = self.MIRROR_ROTATE[mirror, rotation]
+            if bgr:  # Set BGR bit
+                self.rotation |= 0b00001000
 
         # Initialize GPIO pins and set implementation specific methods
         if implementation.name == 'circuitpython':
@@ -994,7 +999,6 @@ class Display(object):
         """
         if top + bottom <= self.height:
             middle = self.height - (top + bottom)
-            print(top, middle, bottom)
             self.write_cmd(self.VSCRDEF,
                            top >> 8,
                            top & 0xFF,
