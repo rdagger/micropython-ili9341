@@ -5,7 +5,7 @@ Therefore, I'm using micropython-lib sdcard.py to control the SD Card.
 https://github.com/micropython/micropython-lib/tree/master/micropython/drivers/storage/sdcard
 
 The SD Card should be set to the same SPI bus as the touchscreen because they
-both run at slower speeds.  The display should be run on it's own SPI bus to
+both run at slower speeds.  The display should be run on its own SPI bus to
 take advantage of the higher bandwidth.
 
 If your board has a built-in SD card then you will want to identify what GPIO
