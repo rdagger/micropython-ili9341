@@ -624,7 +624,7 @@ class Display(object):
             b_color = ((background & 0xFF) << 8) | ((background & 0xFF00) >> 8)
             fbuf.fill(b_color)
         # Swap text color bytes to correct for framebuf endianness
-        t_color = ((color & 0x00FF) << 8) | ((color & 0xFF00) >> 8)
+        t_color = ((color & 0xFF) << 8) | ((color & 0xFF00) >> 8)
         fbuf.text(text, 0, 0, t_color)
         if rotate == 0:
             self.block(x, y, x + w - 1, y + (h - 1), buf)
