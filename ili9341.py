@@ -617,18 +617,15 @@ class Display(object):
         # Confirm coordinates in boundary
         if self.is_off_grid(x, y, x + 7, y + 7):
             return
-        # Rearrange color
-        r = (color & 0xF800) >> 8
-        g = (color & 0x07E0) >> 3
-        b = (color & 0x1F) << 3
         buf = bytearray(w * 16)
         fbuf = FrameBuffer(buf, w, h, RGB565)
         if background != 0:
-            bg_r = (background & 0xF800) >> 8
-            bg_g = (background & 0x07E0) >> 3
-            bg_b = (background & 0x1F) << 3
-            fbuf.fill(color565(bg_b, bg_r, bg_g))
-        fbuf.text(text, 0, 0, color565(b, r, g))
+            # Swap background color bytes to correct for framebuf endianness
+            b_color = ((background & 0xFF) << 8) | ((background & 0xFF00) >> 8)
+            fbuf.fill(b_color)
+        # Swap text color bytes to correct for framebuf endianness
+        t_color = ((color & 0x00FF) << 8) | ((color & 0xFF00) >> 8)
+        fbuf.text(text, 0, 0, t_color)
         if rotate == 0:
             self.block(x, y, x + w - 1, y + (h - 1), buf)
         elif rotate == 90:
