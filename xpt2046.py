@@ -67,13 +67,13 @@ class Touch(object):
         x,y = self.normalize(x,y)
 
         if rotation == 0:
-            return x, self.height - y - 1
+            return max(0, min(x,self.width- 1)), max(0, min(self.height - y - 1,self.height- 1))
         elif rotation == 90:
-            return self.height - y - 1, self.width - x - 1
+            return max(0, min(self.height - y - 1,self.height- 1)), max(0, min(self.width - x - 1,self.width- 1))
         elif rotation == 180:
-            return self.width - x - 1, y
+            return max(0, min(self.width - x - 1,self.width- 1)), max(0, min(y,self.height- 1))
         elif rotation == 270:
-            return y , x
+            return max(0, min(y,self.height- 1)) , max(0, min(x,self.width- 1))
 
 
     def get_touch(self):
