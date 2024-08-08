@@ -168,3 +168,19 @@ class XglcdFont(object):
             # Add length of letter and spacing
             length += self.letters[offset] + spacing
         return length
+
+"""
+
+display = Display(hspi, dc=Pin(2), cs=Pin(15), rst=Pin(0), width=320, height=240, rotation=270)
+tft_bl = Pin(21, Pin.OUT)
+tft_bl.value(1)
+display.fill_rectangle(0, 0, 320, 240, 1234)
+display.draw_circle(120,160,50,0)
+display.draw_ellipse(125,165,90,20,9999)
+display.draw_hline(20,40,100,8888)
+from xglcd_font import XglcdFont
+robotron = XglcdFont('fonts/EspressoDolce18x24.c', 18, 24 )
+display.draw_text(100,160,"Hello World",robotron,2016,1234)
+display.draw_text8x8(160,100,"Hello World",0,1234)
+
+"""

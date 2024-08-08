@@ -1,5 +1,5 @@
 """XPT2046 Touch module."""
-from time import sleep
+import time
 
 
 class Touch(object):
@@ -17,7 +17,7 @@ class Touch(object):
 
     def __init__(self, spi, cs, int_pin=None, int_handler=None,
                  width=240, height=320,
-                 x_min=100, x_max=1962, y_min=100, y_max=1900):
+                 x_min=100, x_max=1962, y_min=100, y_max=1900, rotation=0):
         """Initialize touch screen controller.
 
         Args:
@@ -44,6 +44,8 @@ class Touch(object):
         self.x_max = x_max
         self.y_min = y_min
         self.y_max = y_max
+        self.rotation = rotation
+        self.last_touch=0
         self.x_multiplier = width / (x_max - x_min)
         self.x_add = x_min * -self.x_multiplier
         self.y_multiplier = height / (y_max - y_min)
@@ -56,6 +58,23 @@ class Touch(object):
             self.int_locked = False
             int_pin.irq(trigger=int_pin.IRQ_FALLING | int_pin.IRQ_RISING,
                         handler=self.int_press)
+
+
+    def rot(self,x,y,rotation=None): # convert touch locations to possibly-rotated screen locations.
+        if rotation is None:
+            rotation=self.rotation
+
+        x,y = self.normalize(x,y)
+
+        if rotation == 0:
+            return max(0, min(x,self.width- 1)), max(0, min(self.height - y - 1,self.height- 1))
+        elif rotation == 90:
+            return max(0, min(self.height - y - 1,self.height- 1)), max(0, min(self.width - x - 1,self.width- 1))
+        elif rotation == 180:
+            return max(0, min(self.width - x - 1,self.width- 1)), max(0, min(y,self.height- 1))
+        elif rotation == 270:
+            return max(0, min(y,self.height- 1)) , max(0, min(x,self.width- 1))
+
 
     def get_touch(self):
         """Take multiple samples to get accurate touch reading."""
@@ -74,7 +93,7 @@ class Touch(object):
                 if dev <= 50:  # Deviation should be under margin of 50
                     return self.normalize(meanx, meany)
             # get a new value
-            sample = self.raw_touch()  # get a touch
+            sample = self.raw_touch(True)  # get a touch
             if sample is None:
                 nsamples = 0    # Invalidate buff
             else:
@@ -82,7 +101,7 @@ class Touch(object):
                 buffptr = (buffptr + 1) % buf_length  # Incr, until rollover
                 nsamples = min(nsamples + 1, buf_length)  # Incr. until max
 
-            sleep(.05)
+            time.sleep(.05)
             timeout -= .05
         return None
 
@@ -90,14 +109,14 @@ class Touch(object):
         """Send X,Y values to passed interrupt handler."""
         if not pin.value() and not self.int_locked:
             self.int_locked = True  # Lock Interrupt
-            buff = self.raw_touch()
+            buff = self.raw_touch(True)
 
             if buff is not None:
                 x, y = self.normalize(*buff)
                 self.int_handler(x, y)
-            sleep(.1)  # Debounce falling edge
+            time.sleep(.1)  # Debounce falling edge
         elif pin.value() and self.int_locked:
-            sleep(.1)  # Debounce rising edge
+            time.sleep(.1)  # Debounce rising edge
             self.int_locked = False  # Unlock interrupt
 
     def normalize(self, x, y):
@@ -106,7 +125,7 @@ class Touch(object):
         y = int(self.y_multiplier * y + self.y_add)
         return x, y
 
-    def raw_touch(self):
+    def raw_touch(self,xyonly=False,nozero=True):
         """Read raw X,Y touch values.
 
         Returns:
@@ -114,10 +133,26 @@ class Touch(object):
         """
         x = self.send_command(self.GET_X)
         y = self.send_command(self.GET_Y)
-        if self.x_min <= x <= self.x_max and self.y_min <= y <= self.y_max:
-            return (x, y)
-        else:
-            return None
+        if xyonly:
+            if self.x_min <= x <= self.x_max and self.y_min <= y <= self.y_max:
+                return (x, y)
+            else:
+                return None
+        else: # some boards give spurious touch events, which can be filtered out by looking at pressure and timing
+            z1 = self.send_command(self.GET_Z1) # pressure
+            z2 = self.send_command(self.GET_Z2)
+            t0 = self.send_command(self.GET_TEMP0) # temperature
+            t1 = self.send_command(self.GET_TEMP1)
+            b = self.send_command(self.GET_BATTERY)
+            a = self.send_command(self.GET_AUX) # chip aux ADC input
+            p = x * (z1 - z2) / z1 if z1>0 else None # touch-pressure is a formula based on x
+            p2 = x/4096 * (z2/z1-1) if z1>0 else None # touch-pressure is a formula based on x
+            d = None
+            if p is not None:
+                now=time.ticks_ms()
+                d = time.ticks_diff(now, self.last_touch) # timediff since last (for debounce)
+                self.last_touch=now
+            return (p, x, y, z1, z2, t0, t1, b, a, d, p2) + tuple(self.normalize(x,y) + tuple(self.rot(x,y))) # cnd
 
     def send_command(self, command):
         """Write command to XT2046 (MicroPython).
@@ -133,3 +168,20 @@ class Touch(object):
         self.cs(1)
 
         return (self.rx_buf[1] << 4) | (self.rx_buf[2] >> 4)
+
+
+
+""" Examples
+
+import time
+from xpt2046 import Touch
+from machine import Pin, SPI, ADC, PWM, SDCard, SoftSPI
+sspi = SoftSPI(baudrate=500000, sck=Pin(25), mosi=Pin(32), miso=Pin(39))
+touch = Touch(sspi, cs=Pin(33)) # a, int_pin=Pin(36), int_handler=self._touch_handler)
+while True:
+time.sleep(0.1)
+t = touch.raw_touch() # (p, x, y, z1, z2, t0, t1, b, a, d)
+if t[-1] is not None:
+print(t)
+
+"""
