@@ -1,7 +1,7 @@
 """ILI9341 demo (shapes)."""
 from time import sleep
 from ili9341 import Display, color565
-from machine import Pin, SPI
+from machine import Pin, SPI  # type: ignore
 
 
 def test():

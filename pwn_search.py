@@ -1,9 +1,9 @@
 """Search online for pwned passwords."""
-from machine import Pin, SPI
+from machine import Pin, SPI  # type: ignore
 from hashlib import sha1
-from ubinascii import hexlify
+from ubinascii import hexlify  # type: ignore
 from urequests2 import get
-from network import STA_IF, WLAN
+from network import STA_IF, WLAN  # type: ignore
 import gc
 from xpt2046 import Touch
 from ili9341 import Display, color565

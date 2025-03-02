@@ -10,47 +10,28 @@ def test():
     display = Display(spi, dc=Pin(4), cs=Pin(16), rst=Pin(17))
 
     display.draw_text8x8(0, 0, 'Built-in', color565(255, 0, 0))
-    display.fill_rectangle(0, 10, 127, 20, color565(255, 0, 0))
-    display.draw_text8x8(0, 15, 'Built-in', color565(0, 0, 0),
+    display.fill_rectangle(0, 10, 104, 12, color565(255, 0, 0))
+    display.draw_text8x8(0, 12, 'Built-in', color565(0, 0, 0),
                          color565(255, 0, 0))
 
-    display.draw_text8x8(0, 40, 'MicroPython', color565(0, 255, 0))
-    display.fill_rectangle(0, 50, 127, 20, color565(0, 255, 0))
-    display.draw_text8x8(0, 55, 'MicroPython-in', color565(0, 0, 0),
+    display.draw_text8x8(0, 30, 'MicroPython', color565(0, 255, 0))
+    display.fill_rectangle(0, 40, 104, 12, color565(0, 255, 0))
+    display.draw_text8x8(0, 42, 'MicroPython', color565(0, 0, 0),
                          color565(0, 255, 0))
 
-    display.draw_text8x8(0, 80, '8x8 Font', color565(0, 0, 255))
-    display.fill_rectangle(0, 90, 127, 20, color565(0, 0, 255))
-    display.draw_text8x8(0, 95, '8x8 Font', color565(0, 0, 0),
+    display.draw_text8x8(0, 60, '8x8 Font', color565(0, 0, 255))
+    display.fill_rectangle(0, 70, 104, 12, color565(0, 0, 255))
+    display.draw_text8x8(0, 72, '8x8 Font', color565(0, 0, 0),
                          color565(0, 0, 255))
 
-    display.draw_text8x8(0, 120, 'Built-in', color565(255, 255, 0))
-    display.fill_rectangle(0, 130, 127, 20, color565(255, 255, 0))
-    display.draw_text8x8(0, 135, 'Built-in', color565(0, 0, 0),
-                         color565(255, 255, 0))
-
-    display.draw_text8x8(0, 160, 'MicroPython', color565(0, 255, 255))
-    display.fill_rectangle(0, 170, 127, 20, color565(0, 255, 255))
-    display.draw_text8x8(0, 175, 'MicroPython-in', color565(0, 0, 0),
-                         color565(0, 255, 255))
-
-    display.draw_text8x8(0, 200, '8x8 Font', color565(255, 0, 255))
-    display.fill_rectangle(0, 210, 127, 20, color565(255, 0, 255))
-    display.draw_text8x8(0, 215, '8x8 Font', color565(0, 0, 0),
-                         color565(255, 0, 255))
-    
-    display.draw_text8x8(0, 240, 'No Background', color565(255, 255, 255))
-    display.fill_rectangle(0, 250, 127, 20, color565(255, 255, 255))
-    display.draw_text8x8(0, 255, 'No Background', color565(255, 255, 255))
+    display.draw_text8x8(0, 90, 'No Background', color565(255, 255, 255))
+    display.fill_rectangle(0, 100, 104, 12, color565(255, 255, 255))
+    display.draw_text8x8(0, 102, 'No Background', color565(255, 255, 255))
 
     y_center = display.height // 2
-    display.draw_text8x8(display.width - 29, y_center - 48, "Rotate = 270",
-                         color565(255, 255, 255), rotate=270)
-    display.fill_rectangle(display.width - 19, 60, 18, 200,
-                           color565(255, 128, 0))
-    display.draw_text8x8(display.width - 14, y_center - 48, "Rotate = 270",
-                         color565(255, 255, 255), rotate=270,
-                         background=color565(255, 128, 0))
+    display.draw_text8x8(display.width - 10, y_center - 48, "Rotate = 270",
+                         color565(0, 255, 255), color565(255, 0, 255),
+                         rotate=270)
 
     sleep(15)
     display.cleanup()

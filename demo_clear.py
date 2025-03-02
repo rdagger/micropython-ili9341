@@ -1,10 +1,8 @@
 """ILI9341 demo (clear)."""
 from time import sleep, ticks_ms
 from ili9341 import Display, color565
-from machine import Pin, SPI
+from machine import Pin, SPI  # type: ignore
 import gc
-
-valid_hlines = [1, 2, 4, 5, 8, 10, 16, 20, 32, 40, 64, 80, 160]
 
 colors = {
     "RED": (255, 0, 0),
@@ -13,7 +11,7 @@ colors = {
     "YELLOW": (255, 255, 0),
     "AQUA": (0, 255, 255),
     "MAROON": (128, 0, 0),
-    "DARKGREEN": (0, 128, 0),
+    "DARK_GREEN": (0, 128, 0),
     "NAVY": (0, 0, 128),
     "TEAL": (0, 128, 128),
     "PURPLE": (128, 0, 128),
@@ -22,11 +20,26 @@ colors = {
     "CYAN": (128, 255, 255),
 }
 
+
 def test():
     """Test code."""
     # Baud rate of 40000000 seems about the max
     spi = SPI(1, baudrate=40000000, sck=Pin(14), mosi=Pin(13))
     display = Display(spi, dc=Pin(4), cs=Pin(16), rst=Pin(17))
+
+    # Calculate valid hlines parameters for display clear method
+    valid_hlines = []
+    for i in range(1, display.height):
+        if display.height % i == 0:
+            valid_hlines.append(i)
+    # Ensure only 13 entries, truncate or repeat the last one
+    valid_hlines = valid_hlines[:13]
+    if len(valid_hlines) < 13:
+        valid_hlines += [valid_hlines[-1]] * (13 - len(valid_hlines))
+    # Ensure only 13 entries, truncate or repeat the last one
+    valid_hlines = valid_hlines[:13]
+    if len(valid_hlines) < 13:
+        valid_hlines += [valid_hlines[-1]] * (13 - len(valid_hlines))
 
     print('Clearing to black...')
     start = ticks_ms()

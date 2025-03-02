@@ -20,7 +20,7 @@ class XglcdFont(object):
         you must use XP compatibility mode or you can just use the clipboard.
     """
 
-    # Dict to tranlate bitwise values to byte position
+    # Dict to translate bitwise values to byte position
     BIT_POS = {1: 0, 2: 2, 4: 4, 8: 6, 16: 8, 32: 10, 64: 12, 128: 14, 256: 16}
 
     def __init__(self, path, width, height, start_letter=32, letter_count=96):
@@ -30,7 +30,7 @@ class XglcdFont(object):
             path (string): Full path of font file
             width (int): Maximum width in pixels of each letter
             height (int): Height in pixels of each letter
-            start_letter (int): First ACII letter.  Default is 32.
+            start_letter (int): First ASCII letter.  Default is 32.
             letter_count (int): Total number of letters.  Default is 96.
         """
         self.width = width
@@ -127,7 +127,7 @@ class XglcdFont(object):
                     pos += 16
                     lh -= 8
                 else:
-                    # Descrease position to start of previous column
+                    # Decrease position to start of previous column
                     pos -= (letter_height * 4) - (lh * 2)
                     lh = letter_height
         else:

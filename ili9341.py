@@ -94,7 +94,7 @@ class Display(object):
     }
 
     def __init__(self, spi, cs, dc, rst, width=240, height=320, rotation=0,
-                 mirror=False, bgr=True, gamma=True):
+                 mirror=False, bgr=True, gamma=True, x_offset=0, y_offset=0):
         """Initialize OLED.
 
         Args:
@@ -108,6 +108,8 @@ class Display(object):
             mirror (Optional bool): Mirror display (default False)
             bgr (Optional bool): Swaps red and blue colors (default True)
             gamma (Optional bool): Custom gamma correction (default True)
+            x_offset (Optional int): X-axis origin offset (default 0)
+            y_offset (Optional int): Y-axis origin offset (default 0)
         """
         self.spi = spi
         self.cs = cs
@@ -121,6 +123,10 @@ class Display(object):
             self.rotation = self.MIRROR_ROTATE[mirror, rotation]
             if bgr:  # Set BGR bit
                 self.rotation |= 0b00001000
+        # Check for offset
+        self.offset = bool(x_offset or y_offset)
+        self.x_offset = x_offset
+        self.y_offset = y_offset
 
         # Initialize GPIO pins and set implementation specific methods
         if implementation.name == 'circuitpython':
@@ -181,6 +187,12 @@ class Display(object):
             y1 (int):  Ending Y position.
             data (bytes): Data buffer to write.
         """
+        if self.offset:  # Add offset if specified
+            x0 += self.x_offset
+            x1 += self.x_offset
+            y0 += self.y_offset
+            y1 += self.y_offset
+
         self.write_cmd(self.SET_COLUMN,
                        x0 >> 8, x0 & 0xff, x1 >> 8, x1 & 0xff)
         self.write_cmd(self.SET_PAGE,

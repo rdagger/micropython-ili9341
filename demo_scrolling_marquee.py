@@ -9,15 +9,15 @@ def test():
     try:
         # Implementation dependant pin and SPI configuration
         if implementation.name == 'circuitpython':
-            import board
-            from busio import SPI
-            from digitalio import DigitalInOut
+            import board  # type: ignore
+            from busio import SPI  # type: ignore
+            from digitalio import DigitalInOut  # type: ignore
             cs_pin = DigitalInOut(board.P0_15)
             dc_pin = DigitalInOut(board.P0_17)
             rst_pin = DigitalInOut(board.P0_20)
             spi = SPI(clock=board.P0_24, MOSI=board.P0_22)
         else:
-            from machine import Pin, SPI
+            from machine import Pin, SPI  # type: ignore
             cs_pin = Pin(16)
             dc_pin = Pin(4)
             rst_pin = Pin(17)

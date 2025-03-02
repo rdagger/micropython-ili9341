@@ -1,7 +1,7 @@
 """ILI9341 demo (bouncing sprite)."""
 from ili9341 import Display
-from machine import Pin, SPI
-from utime import sleep_us, ticks_us, ticks_diff
+from machine import Pin, SPI  # type: ignore
+from utime import sleep_us, ticks_us, ticks_diff  # type: ignore
 
 
 class BouncingSprite(object):

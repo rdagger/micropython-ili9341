@@ -1,8 +1,8 @@
 """ILI9341 demo (bouncing boxes)."""
-from machine import Pin, SPI
+from machine import Pin, SPI  # type: ignore
 from random import random, seed
 from ili9341 import Display, color565
-from utime import sleep_us, ticks_cpu, ticks_us, ticks_diff
+from utime import sleep_us, ticks_cpu, ticks_us, ticks_diff  # type: ignore
 
 
 class Box(object):
@@ -81,6 +81,7 @@ def test():
         # Baud rate of 40000000 seems about the max
         spi = SPI(1, baudrate=40000000, sck=Pin(14), mosi=Pin(13))
         display = Display(spi, dc=Pin(4), cs=Pin(16), rst=Pin(17))
+
         display.clear()
 
         colors = [color565(255, 0, 0),
@@ -90,7 +91,7 @@ def test():
                   color565(0, 255, 255),
                   color565(255, 0, 255)]
         sizes = [12, 11, 10, 9, 8, 7]
-        boxes = [Box(239, 319, sizes[i], display,
+        boxes = [Box(display.width, display.height, sizes[i], display,
                  colors[i]) for i in range(6)]
 
         while True:

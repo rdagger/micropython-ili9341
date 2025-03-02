@@ -1,7 +1,7 @@
 """ILI9341 demo (fonts)."""
 from time import sleep
 from ili9341 import Display, color565
-from machine import Pin, SPI
+from machine import Pin, SPI  # type: ignore
 from xglcd_font import XglcdFont
 
 
@@ -32,68 +32,107 @@ def test():
     wendy = XglcdFont('fonts/Wendy7x8.c', 7, 8)
     print('Fonts loaded.')
 
-    display.draw_text(0, 0, 'Arcade Pix 9x11', arcadepix, color565(255, 0, 0))
-    display.draw_text(0, 22, 'Bally 7x9', bally, color565(0, 255, 0))
-    display.draw_text(0, 43, 'Broadway 17x15', broadway, color565(0, 0, 255))
-    display.draw_text(0, 66, 'Espresso Dolce 18x24', espresso_dolce,
+    text_heights = [11, 9, 15, 24, 8, 7, 21, 24, 8]  # Heights of each line
+    num_lines = len(text_heights)  # Number of lines
+    total_text_height = sum(text_heights)  # Total height of all text lines
+    # Calculate available space to distribute
+    available_height = display.height - total_text_height
+    # Calculate the vertical gap between each line
+    gap_between_lines = available_height // (num_lines + 1)
+    # Start drawing the text at the first position
+    y_position = gap_between_lines  # Start of first line of text
+    # Draw each text line with adjusted Y positions
+    display.draw_text(0, y_position, 'Arcade Pix 9x11', arcadepix,
+                      color565(255, 0, 0))
+    y_position += text_heights[0] + gap_between_lines
+    display.draw_text(0, y_position, 'Bally 7x9', bally, color565(0, 255, 0))
+    y_position += text_heights[1] + gap_between_lines
+    display.draw_text(0, y_position, 'Broadway', broadway,
+                      color565(0, 0, 255))
+    y_position += text_heights[2] + gap_between_lines
+    display.draw_text(0, y_position, 'Espresso', espresso_dolce,
                       color565(0, 255, 255))
-    display.draw_text(0, 104, 'Fixed Font 5x8', fixed_font,
+    y_position += text_heights[3] + gap_between_lines
+    display.draw_text(0, y_position, 'Fixed Font 5x8', fixed_font,
                       color565(255, 0, 255))
-    display.draw_text(0, 125, 'Neato 5x7', neato, color565(255, 255, 0))
-    display.draw_text(0, 155, 'ROBOTRON 13X21', robotron,
+    y_position += text_heights[4] + gap_between_lines
+    display.draw_text(0, y_position, 'Neato 5x7', neato, color565(255, 255, 0))
+    y_position += text_heights[5] + gap_between_lines
+    display.draw_text(0, y_position, 'ROBOTRON', robotron,
                       color565(255, 255, 255))
-    display.draw_text(0, 190, 'Unispace 12x24', unispace,
+    y_position += text_heights[6] + gap_between_lines
+    display.draw_text(0, y_position, 'Unispace', unispace,
                       color565(255, 128, 0))
-    display.draw_text(0, 220, 'Wendy 7x8', wendy, color565(255, 0, 128))
-
+    y_position += text_heights[7] + gap_between_lines
+    display.draw_text(0, y_position, 'Wendy 7x8', wendy, color565(255, 0, 128))
     sleep(9)
+
     display.clear()
-
-    display.draw_text(0, 255, 'Arcade Pix 9x11', arcadepix,
-                      color565(255, 0, 0),
-                      landscape=True)
-    display.draw_text(22, 255, 'Bally 7x9', bally, color565(0, 255, 0),
-                      landscape=True)
-    display.draw_text(43, 255, 'Broadway 17x15', broadway, color565(0, 0, 255),
-                      landscape=True)
-    display.draw_text(66, 255, 'Espresso Dolce 18x24', espresso_dolce,
-                      color565(0, 255, 255), landscape=True)
-    display.draw_text(104, 255, 'Fixed Font 5x8', fixed_font,
-                      color565(255, 0, 255), landscape=True)
-    display.draw_text(125, 255, 'Neato 5x7', neato, color565(255, 255, 0),
-                      landscape=True)
-    display.draw_text(155, 255, 'ROBOTRON 13X21', robotron,
-                      color565(255, 255, 255),
-                      landscape=True)
-    display.draw_text(190, 255, 'Unispace 12x24', unispace,
-                      color565(255, 128, 0),
-                      landscape=True)
-    display.draw_text(220, 255, 'Wendy 7x8', wendy, color565(255, 0, 128),
-                      landscape=True)
-
-    sleep(9)
-    display.clear()
-
-    display.draw_text(0, 0, 'Arcade Pix 9x11', arcadepix, color565(255, 0, 0),
-                      background=color565(0, 255, 255))
-    display.draw_text(0, 22, 'Bally 7x9', bally, color565(0, 255, 0),
-                      background=color565(0, 0, 128))
-    display.draw_text(0, 43, 'Broadway', broadway, color565(0, 0, 255),
-                      background=color565(255, 255, 0))
-    display.draw_text(0, 66, 'Espresso', espresso_dolce,
+    y_position = gap_between_lines  # Start of first line of text
+    display.draw_text(0, y_position, 'Arcade Pix 9x11', arcadepix,
+                      color565(255, 0, 0), background=color565(0, 255, 255))
+    y_position += text_heights[0] + gap_between_lines
+    display.draw_text(0, y_position, 'Bally 7x9', bally,
+                      color565(0, 255, 0), background=color565(0, 0, 128))
+    y_position += text_heights[1] + gap_between_lines
+    display.draw_text(0, y_position, 'Broadway', broadway,
+                      color565(0, 0, 255), background=color565(255, 255, 0))
+    y_position += text_heights[2] + gap_between_lines
+    display.draw_text(0, y_position, 'Espresso', espresso_dolce,
                       color565(0, 255, 255), background=color565(255, 0, 0))
-    display.draw_text(0, 104, 'Fixed Font 5x8', fixed_font,
+    y_position += text_heights[3] + gap_between_lines
+    display.draw_text(0, y_position, 'Fixed Font 5x8', fixed_font,
                       color565(255, 0, 255), background=color565(0, 128, 0))
-    display.draw_text(0, 125, 'Neato 5x7', neato, color565(255, 255, 0),
-                      background=color565(0, 0, 255))
-    display.draw_text(0, 155, 'ROBOTRON 13X21', robotron,
+    y_position += text_heights[4] + gap_between_lines
+    display.draw_text(0, y_position, 'Neato 5x7', neato,
+                      color565(255, 255, 0), background=color565(0, 0, 255))
+    y_position += text_heights[5] + gap_between_lines
+    display.draw_text(0, y_position, 'ROBOTRON', robotron,
                       color565(255, 255, 255),
                       background=color565(128, 128, 128))
-    display.draw_text(0, 190, 'Unispace', unispace, color565(255, 128, 0),
-                      background=color565(0, 128, 255))
-    display.draw_text(0, 220, 'Wendy 7x8', wendy, color565(255, 0, 128),
+    y_position += text_heights[6] + gap_between_lines
+    display.draw_text(0, y_position, 'Unispace', unispace,
+                      color565(255, 128, 0), background=color565(0, 128, 255))
+    y_position += text_heights[7] + gap_between_lines
+    display.draw_text(0, y_position, 'Wendy 7x8', wendy,
+                      color565(255, 0, 128),
                       background=color565(255, 255, 255))
+    sleep(9)
 
+    display.clear()
+    # Calculate available horizontal space
+    available_width = display.width - total_text_height
+    # Calculate the horizontal gap between each line
+    gap_between_lines = available_width // (num_lines + 1)
+    # Starting X position for each line
+    x_position = gap_between_lines
+    # Draw each text line with adjusted X positions
+    display.draw_text(x_position, display.height - 1, 'Arcade Pix 9x11',
+                      arcadepix, color565(255, 0, 0), landscape=True)
+    x_position += text_heights[0] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Bally 7x9', bally,
+                      color565(0, 255, 0), landscape=True)
+    x_position += text_heights[1] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Broadway 17x15',
+                      broadway, color565(0, 0, 255), landscape=True)
+    x_position += text_heights[2] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Espresso',
+                      espresso_dolce, color565(0, 255, 255), landscape=True)
+    x_position += text_heights[3] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Fixed Font 5x8',
+                      fixed_font, color565(255, 0, 255), landscape=True)
+    x_position += text_heights[4] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Neato 5x7', neato,
+                      color565(255, 255, 0), landscape=True)
+    x_position += text_heights[5] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'ROBOTRON',
+                      robotron, color565(255, 255, 255), landscape=True)
+    x_position += text_heights[6] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Unispace',
+                      unispace, color565(255, 128, 0), landscape=True)
+    x_position += text_heights[7] + gap_between_lines
+    display.draw_text(x_position, display.height - 1, 'Wendy 7x8', wendy,
+                      color565(255, 0, 128), landscape=True)
     sleep(9)
     display.cleanup()
 

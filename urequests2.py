@@ -10,9 +10,10 @@ Notes:
     memory allocation errors when parsing REST API data.
 """
 
-import usocket
+import usocket  # type: ignore
 
 ITER_CHUNK_SIZE = 128
+
 
 class Response:
 

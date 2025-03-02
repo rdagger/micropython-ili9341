@@ -1,4 +1,5 @@
 """Touch keyboard."""
+from micropython import const  # type: ignore
 
 
 class TouchKeyboard(object):
@@ -35,7 +36,7 @@ class TouchKeyboard(object):
     )
 
     def __init__(self, display, font):
-        """Initialize Keybaord.
+        """Initialize Keyboard.
 
         Args:
             display (Display class): LCD Display

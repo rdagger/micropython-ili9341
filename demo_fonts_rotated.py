@@ -1,7 +1,7 @@
 """ILI9341 demo (fonts rotated)."""
 from time import sleep
 from ili9341 import Display, color565
-from machine import Pin, SPI
+from machine import Pin, SPI  # type: ignore
 from xglcd_font import XglcdFont
 
 
@@ -29,56 +29,56 @@ def test():
                       'Portrait', arcadepix,
                       color565(255, 255, 0),
                       landscape=False, rotate_180=False)
-    text_width = arcadepix.measure_text('Landscape') 
+    text_width = arcadepix.measure_text('Landscape')
     display.draw_text(0, display.height - 1,
                       'Landscape', arcadepix,
                       color565(255, 0, 0),
                       landscape=True, rotate_180=False)
-    text_width = arcadepix.measure_text('Portrait, Rotate 180')
+    text_width = arcadepix.measure_text('Port. Rot. 180')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height,
-                      'Portrait, Rotate 180', arcadepix,
+                      'Port. Rot. 180', arcadepix,
                       color565(255, 0, 255),
                       landscape=False, rotate_180=True)
-    text_width = arcadepix.measure_text('Landscape, Rotate 180')
-    display.draw_text(display.width - font_height - 1 , text_width,
-                      'Landscape, Rotate 180', arcadepix,
+    text_width = arcadepix.measure_text('Land. Rot. 180')
+    display.draw_text(display.width - font_height - 1, text_width,
+                      'Land. Rot. 180', arcadepix,
                       color565(0, 0, 255),
                       landscape=True, rotate_180=True)
-    sleep(5)    
+    sleep(5)
 
     # Espresso Dolce
     display.clear()
     font_height = espressodolce.height
     display.draw_text(0, 0,
-                      'PORTRAIT', espressodolce,
+                      'PORT.', espressodolce,
                       color565(255, 255, 0),
                       landscape=False, rotate_180=False)
-    text_width = espressodolce.measure_text('LANDSCAPE') 
+    text_width = espressodolce.measure_text('LAND.')
     display.draw_text(0, display.height - 1,
-                      'LANDSCAPE', espressodolce,
+                      'LAND.', espressodolce,
                       color565(255, 0, 0),
                       landscape=True, rotate_180=False)
-    text_width = espressodolce.measure_text('PORTRAIT,')
+    text_width = espressodolce.measure_text('PORT.')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height,
-                      'PORTRAIT,', espressodolce,
+                      'PORT.', espressodolce,
                       color565(255, 0, 255),
                       landscape=False, rotate_180=True)
-    text_width = espressodolce.measure_text('ROTATE 180')
+    text_width = espressodolce.measure_text('ROT. 180')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height * 2,
-                      'ROTATE 180', espressodolce,
+                      'ROT. 180', espressodolce,
                       color565(255, 0, 255),
                       landscape=False, rotate_180=True)
-    text_width = espressodolce.measure_text('LANDSCAPE,')
-    display.draw_text(display.width - font_height - 1 , text_width,
-                      'LANDSCAPE,', espressodolce,
+    text_width = espressodolce.measure_text('LAND.')
+    display.draw_text(display.width - font_height - 1, text_width,
+                      'LAND.', espressodolce,
                       color565(0, 0, 255),
                       landscape=True, rotate_180=True)
-    text_width = espressodolce.measure_text('ROTATE 180')
-    display.draw_text(display.width - font_height * 2 - 1 , text_width,
-                      'ROTATE 180', espressodolce,
+    text_width = espressodolce.measure_text('ROT. 180')
+    display.draw_text(display.width - font_height * 2 - 1, text_width,
+                      'ROT. 180', espressodolce,
                       color565(0, 0, 255),
                       landscape=True, rotate_180=True)
     sleep(5)
@@ -90,56 +90,56 @@ def test():
                       'Portrait', neato,
                       color565(255, 255, 0),
                       landscape=False, rotate_180=False)
-    text_width = neato.measure_text('Landscape') 
+    text_width = neato.measure_text('Landscape')
     display.draw_text(0, display.height - 1,
                       'Landscape', neato,
                       color565(255, 0, 0),
                       landscape=True, rotate_180=False)
-    text_width = neato.measure_text('Portrait, Rotate 180')
+    text_width = neato.measure_text('Portrait Rotate 180')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height,
-                      'Portrait, Rotate 180', neato,
+                      'Portrait Rotate 180', neato,
                       color565(255, 0, 255),
                       landscape=False, rotate_180=True)
-    text_width = neato.measure_text('Landscape, Rotate 180')
-    display.draw_text(display.width - font_height - 1 , text_width,
-                      'Landscape, Rotate 180', neato,
+    text_width = neato.measure_text('Landscape Rotate 180')
+    display.draw_text(display.width - font_height - 1, text_width,
+                      'Landscape Rotate 180', neato,
                       color565(0, 0, 255),
                       landscape=True, rotate_180=True)
     sleep(5)
- 
+
     # Robotron
     display.clear()
     font_height = robotron.height
     display.draw_text(0, 0,
-                      'PORTRAIT', robotron,
+                      'PORT.', robotron,
                       color565(255, 255, 0),
                       landscape=False, rotate_180=False)
-    text_width = robotron.measure_text('LANDSCAPE') 
+    text_width = robotron.measure_text('LAND.')
     display.draw_text(0, display.height - 1,
-                      'LANDSCAPE', robotron,
+                      'LAND.', robotron,
                       color565(255, 0, 0),
                       landscape=True, rotate_180=False)
-    text_width = robotron.measure_text('PORTRAIT,')
+    text_width = robotron.measure_text('PORT.')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height,
-                      'PORTRAIT,', robotron,
+                      'PORT.', robotron,
                       color565(255, 0, 255),
                       landscape=False, rotate_180=True)
-    text_width = robotron.measure_text('ROTATE 180')
+    text_width = robotron.measure_text('ROT. 180')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height * 2,
-                      'ROTATE 180', robotron,
+                      'ROT. 180', robotron,
                       color565(255, 0, 255),
                       landscape=False, rotate_180=True)
-    text_width = robotron.measure_text('LANDSCAPE,')
-    display.draw_text(display.width - font_height - 1 , text_width,
-                      'LANDSCAPE,', robotron,
+    text_width = robotron.measure_text('LAND.')
+    display.draw_text(display.width - font_height - 1, text_width,
+                      'LAND.', robotron,
                       color565(0, 0, 255),
                       landscape=True, rotate_180=True)
-    text_width = robotron.measure_text('ROTATE 180')
-    display.draw_text(display.width - font_height * 2 - 1 , text_width,
-                      'ROTATE 180', robotron,
+    text_width = robotron.measure_text('ROT. 180')
+    display.draw_text(display.width - font_height * 2 - 1, text_width,
+                      'ROT. 180', robotron,
                       color565(0, 0, 255),
                       landscape=True, rotate_180=True)
     sleep(5)
@@ -148,43 +148,43 @@ def test():
     display.clear()
     font_height = unispace.height
     display.draw_text(0, 0,
-                      'PORTRAIT', unispace,
+                      'PORT. ', unispace,
                       color565(255, 255, 0),
                       background=color565(255, 0, 0),
                       landscape=False, rotate_180=False)
-    text_width = unispace.measure_text('LANDSCAPE') 
+    text_width = unispace.measure_text('LAND. ')
     display.draw_text(0, display.height - 1,
-                      'LANDSCAPE', unispace,
+                      'LAND. ', unispace,
                       color565(255, 0, 0),
                       background=color565(255, 255, 0),
                       landscape=True, rotate_180=False)
-    text_width = unispace.measure_text('PORTRAIT,')
+    text_width = unispace.measure_text('PORT. ')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height,
-                      'PORTRAIT,', unispace,
+                      'PORT. ', unispace,
                       color565(255, 0, 255),
                       background=color565(0, 255, 0),
                       landscape=False, rotate_180=True)
-    text_width = unispace.measure_text('ROTATE 180')
+    text_width = unispace.measure_text('ROT. 180')
     display.draw_text(display.width - text_width - 1,
                       display.height - font_height * 2,
-                      'ROTATE 180', unispace,
+                      'ROT. 180', unispace,
                       color565(255, 0, 255),
                       background=color565(0, 255, 0),
                       landscape=False, rotate_180=True)
-    text_width = unispace.measure_text('LANDSCAPE,')
-    display.draw_text(display.width - font_height - 1 , text_width,
-                      'LANDSCAPE,', unispace,
+    text_width = unispace.measure_text('LAND. ')
+    display.draw_text(display.width - font_height - 1, text_width,
+                      'LAND. ', unispace,
                       color565(0, 0, 255),
                       background=color565(255, 255, 0),
                       landscape=True, rotate_180=True)
-    text_width = unispace.measure_text('ROTATE 180')
-    display.draw_text(display.width - font_height * 2 - 1 , text_width,
-                      'ROTATE 180', unispace,
+    text_width = unispace.measure_text('ROT. 180')
+    display.draw_text(display.width - font_height * 2 - 1, text_width,
+                      'ROT. 180', unispace,
                       color565(0, 0, 255),
                       background=color565(255, 255, 0),
                       landscape=True, rotate_180=True)
-    
+
     sleep(10)
     display.cleanup()
 

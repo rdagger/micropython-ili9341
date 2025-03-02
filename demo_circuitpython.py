@@ -1,7 +1,7 @@
 """ILI9341 demo (CircuitPython Text, Shape & Sprite)."""
-import board
-from busio import SPI
-from digitalio import DigitalInOut
+import board  # type: ignore
+from busio import SPI  # type: ignore
+from digitalio import DigitalInOut  # type: ignore
 from ili9341 import Display, color565
 from xglcd_font import XglcdFont
 from time import monotonic, sleep
@@ -98,7 +98,7 @@ def test():
         print('This demo is for CircuitPython only!')
         exit()
     try:
-        # Configuratoin for CS and DC pins:
+        # Configuration for CS and DC pins:
         cs_pin = DigitalInOut(board.P0_15)
         dc_pin = DigitalInOut(board.P0_17)
         rst_pin = DigitalInOut(board.P0_20)

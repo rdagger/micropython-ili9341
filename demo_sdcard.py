@@ -20,7 +20,7 @@ SD card should be formatted to Fat32.
 from ili9341 import Display, color565
 from xpt2046 import Touch
 from machine import idle, Pin, SPI  # type: ignore
-from sdcard import SDCard
+from sdcard import SDCard  # type: ignore
 import os
 
 

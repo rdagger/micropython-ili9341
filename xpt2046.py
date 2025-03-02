@@ -1,5 +1,6 @@
 """XPT2046 Touch module."""
 from time import sleep
+from micropython import const  # type: ignore
 
 
 class Touch(object):
