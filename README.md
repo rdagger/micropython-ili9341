@@ -1,5 +1,5 @@
 # micropython-ili9341
-MicroPython ILI9341 Display and XPT2046 Touch Screen Drivers
+MicroPython ILI9341 Display and XPT2046 Touch Screen Drivers.  Also compatible with ST7735.
 
 Full write up on my website [Rototron](https://www.rototron.info/projects/esp32-pwned-password-checker/) or click picture below for a YouTube video:
 
